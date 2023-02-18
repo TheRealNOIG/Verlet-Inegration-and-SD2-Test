@@ -11,14 +11,14 @@ SDL.SDL_Init(SDL.SDL_INIT_VIDEO);
 IntPtr window = SDL.SDL_CreateWindow("Circle Collision", SDL.SDL_WINDOWPOS_CENTERED, SDL.SDL_WINDOWPOS_CENTERED, 800, 600, SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN);
 
 // Create renderer
-IntPtr renderer = SDL.SDL_CreateRenderer(window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
+IntPtr renderer = SDL.SDL_CreateRenderer(window, -1, SDL.SDL_RendererFlags.SDL_RENDERER_ACCELERATED | SDL.SDL_RendererFlags.SDL_RENDERER_PRESENTVSYNC);
 
 // Create list of circles
 List<Circle> circles = new List<Circle>();
 
 // Generate random number of circles
 Random rand = new Random();
-int numCircles = rand.Next(25, 35);
+int numCircles = rand.Next(10, 10);
 
 // Generate circles
 for (int i = 0; i < numCircles; i++)
@@ -49,6 +49,8 @@ while (!quit)
         }
     }
 
+    float deltaTime = CalculateDeltaTime();
+
     // Clear screen
     SDL.SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL.SDL_RenderClear(renderer);
@@ -66,7 +68,7 @@ while (!quit)
         }
 
         // Update and constrain circle
-        circle.Update(1.0f / 60.0f);
+        circle.Update(deltaTime);
         circle.ConstrainInsideCircle(new Vector2(400, 300), 250);
 
         // Render circle
@@ -82,15 +84,24 @@ SDL.SDL_DestroyRenderer(renderer);
 SDL.SDL_DestroyWindow(window);
 SDL.SDL_Quit();
 
+
+
 float CalculateDeltaTime()
 {
-    // Calculate the time that has elapsed since the last frame
+    // Get the current time
     uint currentFrameTime = SDL.SDL_GetTicks();
-    float deltaTimeInSeconds = (currentFrameTime - lastFrameTime);
+
+    // Calculate the time elapsed since the last frame
+    float deltaTimeInSeconds = (currentFrameTime - lastFrameTime) / 1000f;
+
+    // Update the last frame time
     lastFrameTime = currentFrameTime;
-    Console.WriteLine("DeltaTime: " + deltaTimeInSeconds + " ms");
+
+    Console.WriteLine("DeltaTime: " + deltaTimeInSeconds + " s");
+
     return deltaTimeInSeconds;
 }
+
 
 
 /*// Create a window object

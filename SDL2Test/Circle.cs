@@ -5,11 +5,11 @@ using System.Numerics;
 public class Circle
 {
     // Define constants
-    private const float MASS = 1.0f;
+    private const float MASS = 1f;
     private const float DAMPING = 0.98f;
     private const int CIRCLE_SEGMENTS = 32;
 
-    // Define private variables
+    // Define private variables 
     private Vector2 position;
     private Vector2 oldPosition;
     private Vector2 velocity;
@@ -60,7 +60,7 @@ public class Circle
         // Calculate acceleration based on forces acting on circle
         // For example, if the circle is subject to gravity:
         Vector2 acceleration = new Vector2(0, 981f);
-        return acceleration / MASS;
+        return acceleration;
     }
 
     // Method to constrain circle inside another circle
@@ -68,11 +68,12 @@ public class Circle
     {
         // Calculate distance between center of constraint circle and circle object
         float distance = Vector2.Distance(center, position);
-        if (distance > constraintRadius)
+        float maxDistance = constraintRadius - radius;
+        if (distance > maxDistance)
         {
             // Circle is outside constraint circle, so move it back inside
             Vector2 direction = Vector2.Normalize(position - center);
-            position = center + direction * constraintRadius;
+            position = center + direction * maxDistance;
             oldPosition = position;
         }
     }
