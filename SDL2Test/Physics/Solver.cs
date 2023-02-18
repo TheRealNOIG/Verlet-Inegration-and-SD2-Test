@@ -107,7 +107,7 @@ public class Solver : iUpdatable
         }
 
         // Perform collision detection on circles in adjacent grid cells
-        int substeps = 8;
+        int substeps = 1;
         float subdelta = deltaTime / substeps;
 
         for (int i = 0; i < substeps; i++)
@@ -171,7 +171,8 @@ public class Solver : iUpdatable
             float ux = dx / distance;
             float uy = dy / distance;
 
-            float moveDistance = overlap * 50f * deltaTime;
+            float moveDistance = overlap / 2f;
+
 
             // Move the circles apart by the full amount of overlap in opposite directions along the unit vector
             circle1.Position = new PointF(circle1.Position.X - ux * moveDistance, circle1.Position.Y - uy * moveDistance);
